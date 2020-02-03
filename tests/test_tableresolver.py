@@ -4,6 +4,11 @@ from dynamodb_timeseries import TableResolver, YEARLY, MONTHLY, WEEKLY, DAILY, H
 
 
 class TestTableResolver(unittest.TestCase):
+    def test_init(self):
+        tr = TableResolver('testing-only', interval=MONTHLY)
+        self.assertEqual(tr.prefix, 'testing-only')
+        self.assertEqual(tr.interval, MONTHLY)
+
     def test_invalid_interval(self):
         with self.assertRaises(Exception) as context:
             _ = TableResolver('testing-only', interval=999)

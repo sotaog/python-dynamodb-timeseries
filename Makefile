@@ -21,11 +21,13 @@ deps: venv
 
 test:
 	$(COVERAGE) run -m unittest
+	$(COVERAGE) combine
 	$(COVERAGE) html
 
 
 clean:
 	rm -rf htmlcov
+	rm -rf .coverage
 
 
 distclean: clean

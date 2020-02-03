@@ -28,3 +28,7 @@ timeseries.put(tag, timestamp, value)
 timeseries.put_batch([[tag, timestamp, value]])
 datapoints = timeseries.query(['example-tag'])
 ```
+
+## Environment Variables
+
+`DYNAMODB_TIMESERIES_REGIONS` Regions to create tables in. You can set this rather than passing the argument to each instance of TimeSeries.
