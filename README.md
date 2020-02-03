@@ -1,6 +1,17 @@
-# DynamoDB Timeseries
+# DynamoDB TimeSeries
+
+[![Build Status](https://api.travis-ci.com/sotaog/python-dynamodb-timeseries.svg?branch=master)](https://travis-ci.com/sotaog/python-dynamodb-timeseries)
 
 A set of libraries that make it easier to use DynamoDB as a timeseries datastore.
+
+# Installation
+You can install DynamoDB TimeSeries from PyPI:
+
+```
+pip install python-dynamodb-timeseries
+```
+
+DynamoDB TimeSeries is supported on Python 3.6 and above.
 
 ## Table Resolver
 

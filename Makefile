@@ -8,6 +8,8 @@ all: clean deps build
 
 
 build:
+	$(PIP) install wheel
+	$(PYTHON) setup.py sdist bdist_wheel
 
 
 venv:
@@ -23,6 +25,11 @@ test:
 	$(COVERAGE) run -m unittest
 	$(COVERAGE) combine
 	$(COVERAGE) html
+
+
+publish: build
+	$(PIP) install twine
+	$(PYTHON) -m twine upload dist/*
 
 
 clean:
