@@ -6,8 +6,8 @@ from decimal import Decimal
 from multiprocessing import Pool
 from typing import List, Union
 
-from dynamodb_timeseries import exceptions, DEFAULT_REGIONS
-from dynamodb_timeseries.dynamodb import create_table, list_tables, put, put_batch, query
+from dynamodb_timeseries import exceptions
+from dynamodb_timeseries.dynamodb import CLIENT, create_table, list_tables, put, put_batch, query
 from dynamodb_timeseries.tableresolver import MONTHLY, TableResolver
 
 logger = logging.getLogger(__name__)
@@ -30,13 +30,13 @@ class TimeSeries:
         regions = os.getenv('DYNAMODB_TIMESERIES_REGIONS')
         if regions:
             return [r for r in regions.split(',')]
-        return DEFAULT_REGIONS
+        return [CLIENT.meta.region_name]
 
-    def __init__(self, table_name_prefix: str, interval: int = MONTHLY, regions: List[str] = None):
+    def __init__(self, table_name_prefix: str, interval: int = MONTHLY, regions: List[str] = []):
         self.table_name_prefix = table_name_prefix
         self.__tables = list_tables(table_name_prefix)
         self.tr = TableResolver(table_name_prefix, interval=interval)
-        if regions is None:
+        if not regions:
             regions = self.__get_regions()
         self.regions = regions
 
@@ -106,8 +106,6 @@ class TimeSeries:
                 tables[table_name] = []
             tables[table_name].append(r)
         for table_name, records in tables.items():
-            try:
-                put_batch(table_name, records)
-            except exceptions.TableDoesNotExistException:
+            if table_name not in self.__tables:
                 self.__create_table(table_name)
-                put_batch(table_name, records)
+            put_batch(table_name, records)
