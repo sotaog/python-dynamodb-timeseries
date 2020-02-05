@@ -1,1 +1,0 @@
-DEFAULT_REGIONS = ['us-west-2', 'us-east-2']

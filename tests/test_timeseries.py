@@ -2,15 +2,16 @@ import time
 import unittest
 from unittest.mock import Mock, patch
 
-from dynamodb_timeseries import TimeSeries, DEFAULT_REGIONS, MONTHLY, HOURLY
+from dynamodb_timeseries import TimeSeries, MONTHLY, HOURLY
 
 
 class TestTimeseries(unittest.TestCase):
     @patch('dynamodb_timeseries.dynamodb.CLIENT')
-    def test_init(self, _client):
+    def test_init(self, client):
       ts = TimeSeries('testing')
+      client.meta.region_name.return_value = 'us-west-2'
       self.assertEqual(ts.table_name_prefix, 'testing')
-      self.assertEqual(ts.regions, DEFAULT_REGIONS)
+      self.assertEqual(ts.regions, ['us-west-2'])
       self.assertEqual(ts.tr.interval, MONTHLY)
 
     @patch('dynamodb_timeseries.dynamodb.CLIENT')
