@@ -92,8 +92,18 @@ def create_table(table_name: str, replicated_regions=[]):
         )
 
 
+def list_tables(table_name_prefix: str):
+    table_names = []
+    resp = CLIENT.list_tables()
+    table_names.extend(resp['TableNames'])
+    while 'LastEvaluatedTableName' in resp:
+        resp = CLIENT.list_tables(ExclusiveStartTableName=resp['LastEvaluatedTableName'])
+        table_names.extend(resp['TableNames'])
+    return [name for name in table_names if name.startswith(table_name_prefix)]
+
+
 def query(table_name: str, tag: str, start_timestamp_ms: int, end_timestamp_ms: int, limit: int = 0, order: Union['asc', 'desc'] = 'desc') -> List[dict]:
-    logger.info(
+    logger.debug(
         f'DynamoDB Timeseries Query: {table_name} {tag} {start_timestamp_ms} {end_timestamp_ms} {limit} {order}')
     table = DDB_RESOURCE.Table(table_name)  # pylint: disable=no-member
     key_condition_expression = Key('tag').eq(tag) & Key('timestamp').between(

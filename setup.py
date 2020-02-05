@@ -9,7 +9,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name='python-dynamodb-timeseries',
-    version='0.1.0',
+    version='0.2.0',
     description='Library for working with timeseries data on dynamodb',
     long_description=README,
     long_description_content_type="text/markdown",
