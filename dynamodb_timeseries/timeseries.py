@@ -3,7 +3,7 @@ import os
 import sys
 import time
 from decimal import Decimal
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 from typing import List, Union
 
 from dynamodb_timeseries import exceptions
@@ -23,7 +23,7 @@ def _latest(table_names, tag):
 
 
 class TimeSeries:
-    MAX_CONCURRENCY = 100
+    MAX_CONCURRENCY = cpu_count() * 2
 
     @staticmethod
     def __get_regions():
